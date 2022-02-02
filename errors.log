@@ -1,0 +1,16 @@
+fatal: [158.176.141.61]: FAILED! => {"msg": "Failed to set permissions on the temporary files Ansible needs to create when becoming an unprivileged user (rc: 1, err: chown: /var/tmp/ansible-tmp-1642751489.3418791-28555-167281344649680/: Not owner\nchown: /var/tmp/ansible-tmp-1642751489.3418791-28555-167281344649680/AnsiballZ_command.py: Not owner\n}). For information on working around this, see https://docs.ansible.com/ansible/become.html#becoming-an-unprivileged-user"}
+
+Other relevant docs: 
+https://docs.ansible.com/ansible/2.4/become.html#becoming-an-unprivileged-user
+
+Solution:
+https://stackoverflow.com/questions/47873671/becoming-non-root-user-in-ansible-fails
+
+
+stderr": "/home/oracle/demo_shell.sh: line 15: sqlplus: command not found"
+
+Reading:
+https://stackoverflow.com/questions/39635847/why-ansible-become-user-oracle-does-not-run-user-profiles-scripts
+Solution:
+https://unix.stackexchange.com/questions/368053/automation-of-oracle-xe-installation-with-ansible-and-vagrant-oracle-environme
+

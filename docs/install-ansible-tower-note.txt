@@ -1,0 +1,14 @@
+https://access.redhat.com/documentation/en-us/red_hat_ansible_automation_platform/2.0-ea/html-single/red_hat_ansible_automation_platform_installation_guide/index?lb_target=production
+
+https://developers.redhat.com/blog/2021/02/10/how-to-activate-your-no-cost-red-hat-enterprise-linux-subscription#conclusion
+
+# How to use RH subscription manager
+https://access.redhat.com/solutions/253273
+
+# My RH subscriptions
+https://access.redhat.com/management
+
+
+Enabling or disabling a repository using Red Hat Subscription Management
+https://access.redhat.com/solutions/265523
+

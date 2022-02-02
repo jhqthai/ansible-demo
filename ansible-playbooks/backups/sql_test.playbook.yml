@@ -1,0 +1,30 @@
+- hosts: orclients
+  become: true
+  become_method: sudo
+  become_user: oracle
+  vars:
+    allow_world_readable_tmpfiles: True
+
+
+  tasks:
+    - name: copy shell script to oracle servers
+      copy:
+        src: /home/cecuser/demo-files/demo_shell.sh
+        dest: /home/oracle/demo_shell.sh
+
+    - name: make demo_shell script executable
+      file: dest=/home/oracle/demo_shell.sh mode=+x
+
+    - name: run shell script in oracle servers
+      shell:
+        cmd: |
+          sqlplus oracle/oracle1bm@db19000 << EOM
+          set heading OFF termout ON trimout ON feedback OFF
+          set pagesize 0
+          select sysdate from dual;
+          EOM
+      environment:
+          ORACLE_SID: "db19000"
+          ORACLE_HOME: "/u01/app/product/19c"
+          SQLPLUS_HOME: "/u01/app/oracle/product/19c/bin/sqlplus"
+          PATH: "$PATH:$ORACLE_HOME/bin"

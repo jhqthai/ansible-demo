@@ -1,0 +1,53 @@
+- hosts: orclients
+
+  tasks:
+    - name: oracle clients task
+      block:
+        - name: copy shell script to oracle servers
+          copy:
+            src: /home/cecuser/demo-files/demo_shell.sh
+            dest: /home/oracle/demo_shell.sh
+
+        - name: make demo_shell script executable
+          file: dest=/home/oracle/demo_shell.sh mode=+x
+
+        - name: run shell script in oracle servers
+          shell: "/home/oracle/demo_shell.sh"
+
+        - name: fetch log
+          fetch:
+            src: "/home/oracle/discover_1.txt"
+            dest: "/tmp/fetched/{{inventory_hostname}}-discover_1.txt"
+            flat: true
+
+      become: true
+      become_method: sudo
+      become_user: oracle
+      vars:
+        allow_world_readable_tmpfiles: True
+      
+      environment:
+        ORACLE_HOME: "/u01/app/product/19c"
+        ORACLE_SID: "db19000"
+        PATH: "$PATH:/u01/app/product/19c/bin"
+
+
+    - name: localhost tasks
+      block:
+        - name: add ip address to beginning of each log file
+          lineinfile:
+            path: "/tmp/fetched/{{inventory_hostname}}-discover_1.txt"
+            insertbefore: BOF
+            line: "{{inventory_hostnasme}}"
+
+        - name: clean allnodes.txt
+          file:
+            path: /tmp/fetched/allnodes.txt
+            state: absent
+
+        - name: merge files
+          run_once: yes
+          shell: "cat /tmp/fetched/{{ item }}-discover_1.txt >> /tmp/fetched/allnodes.txt"
+          with_items: "{{groups['orclients']}}"
+          
+      delegate_to: localhost
