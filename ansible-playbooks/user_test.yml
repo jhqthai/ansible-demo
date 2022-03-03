@@ -1,0 +1,9 @@
+- hosts: 158.176.141.190
+  tasks:
+    - name: check user
+      remote_user: oracle
+      command: whoami
+      register: command_output
+
+    - debug:
+        var: command_output.stdout_lines

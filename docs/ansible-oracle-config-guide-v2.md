@@ -1,3 +1,5 @@
+*This configuration allow direct access to oracle user.*
+
 # PART1: Configuration for oracle user
 1. Config oracle user to run sudo command password free
 * As root user, create a file (under /etc/sudoers.d)

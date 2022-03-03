@@ -29,59 +29,28 @@ Source: https://adamtheautomator.com/install-ansible/
 6. Test - Run the following command in cmd
 > `ansible clientName -m ping`
 
-# How to configure Ansible for Oracle
-## How to setup Ansible to become another unprivileged user
-**Change the parameters below in the ansible.cfg file to allow unpriviledge escalation**
-```
-allow_world_readable_tmpfiles = True
-pipelining = True
-```
+# Configure oracle user on Oracle Server for Ansible
+1. Config oracle user to run sudo command password free
+* As root user, create a file (under /etc/sudoers.d)
+` vi /etc/sudoers.d/99-oracle `
+* Add the following in file
+` oracle  ALL=(ALL)  NOPASSWD:ALL `
 
-## Playbook Setup
-**Set playbook as follow to utilises the unpriviledge user account**
-```
-- hosts: orclients
-  become: true
-  become_method: sudo
-  become_user: oracle
-  vars:
-    allow_world_readable_tmpfiles: True
-```
+2. As oracle user, copy ssh public key into oracle authorized_keys (assuming there's a keypair)
 
-**Set up environment path for oracle managed nodes to use oracle db functionality**
+```
+ sudo vi ~/.ssh/authorized_keys 
+ copy public key in file
 
-*Method 1: Set environment individually to each task*
 ```
-- name: run shell script in oracle servers
-    shell: "/home/oracle/demo_shell.sh"
-    environment:
-    ORACLE_HOME: "/u01/app/product/19c"
-    ORACLE_SID: "db19000"
-    PATH: "$PATH:/u01/app/product/19c/bin"]
+# Example: Ansible server example playbook
 ```
-
-*Method 2: Set for the whole block*
-```
+- hosts: 158.176.141.190
   tasks:
-    - name: oracle clients task
-      block:
-        - name: copy shell script to oracle servers
-          copy:
-            src: /home/cecuser/demo-files/demo_shell.sh
-            dest: /home/oracle/demo_shell.sh
-        ....
-        - name: run shell script in oracle servers
-          shell: "/home/oracle/demo_shell.sh"
+    - name: check user
+      remote_user: oracle
+      command: whoami
+      register: command_output
 
-      become: true
-      become_method: sudo
-      become_user: oracle
-      vars:
-        allow_world_readable_tmpfiles: True
-      
-      environment:
-        ORACLE_HOME: "/u01/app/product/19c"
-        ORACLE_SID: "db19000"
-        PATH: "$PATH:/u01/app/product/19c/bin"
-```
-
+    - debug:
+        var: command_output.stdout_lines
