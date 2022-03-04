@@ -19,13 +19,7 @@
             src: "/home/oracle/discover_1.txt"
             dest: "/tmp/fetched/{{inventory_hostname}}-discover_1.txt"
             flat: true
-
-      become: true
-      become_method: sudo
-      become_user: oracle
-      vars:
-        allow_world_readable_tmpfiles: True
-      
+     
       environment:
         ORACLE_HOME: "/u01/app/product/19c"
         ORACLE_SID: "db19000"
